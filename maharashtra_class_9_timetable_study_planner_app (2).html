@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Maharashtra Class 9 Timetable & Study Companion</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        body {
+            -webkit-tap-highlight-color: transparent;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 h-full flex flex-col font-sans select-none overflow-x-hidden">
+
+    <header class="bg-gradient-to-r from-blue-700 to-indigo-800 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-md mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-xl font-bold border border-white/20">
+                    <i class="fa-solid fa-graduation-cap text-amber-300"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-base leading-tight">Class 9 Maharashtra Board</h1>
+                    <p class="text-xs text-blue-200">Timetable & Study Companion</p>
+                </div>
+            </div>
+            <button onclick="openPublishGuide()" class="bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition border border-white/20 flex items-center space-x-1.5">
+                <i class="fa-solid fa-rocket"></i>
+                <span>Publish APK</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-md w-full mx-auto pb-24 overflow-y-auto px-4 pt-4">
+
+        <!-- TAB 1: TIMETABLE -->
+        <div id="tab-timetable" class="tab-content active space-y-4">
+            <!-- School Timing Banner -->
+            <div class="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl p-4 text-white shadow-md relative overflow-hidden">
+                <div class="absolute -right-6 -bottom-6 opacity-10 text-8xl">
+                    <i class="fa-solid fa-school"></i>
+                </div>
+                <div class="flex items-center justify-between mb-2">
+                    <span class="bg-white/20 text-xs font-semibold px-2.5 py-1 rounded-full uppercase tracking-wider">School Hours</span>
+                    <span class="text-xs text-blue-100"><i class="fa-regular fa-clock mr-1"></i>7:00 AM - 12:30 PM</span>
+                </div>
+                <h2 class="text-lg font-bold">Maharashtra State Board</h2>
+                <p class="text-xs text-blue-100 mt-0.5">Monday to Saturday Regular Schedule</p>
+            </div>
+
+            <!-- Day Selector Horizontal Scroll -->
+            <div class="flex space-x-2 overflow-x-auto pb-2 scrollbar-none" id="day-selector">
+                <!-- Populated via JavaScript -->
+            </div>
+
+            <!-- Timetable List Container -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="font-bold text-slate-800 text-sm flex items-center">
+                        <i class="fa-solid fa-calendar-day text-blue-600 mr-2"></i>
+                        <span id="current-selected-day-label">Monday</span> Schedule
+                    </h3>
+                    <button onclick="openEditTimetableModal()" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center bg-blue-50 px-2.5 py-1 rounded-lg">
+                        <i class="fa-solid fa-pen-to-square mr-1"></i> Edit Day
+                    </button>
+                </div>
+                <div class="space-y-3" id="timetable-slots-container">
+                    <!-- Populated via JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: STUDY PLANNER -->
+        <div id="tab-planner" class="tab-content space-y-4">
+            <div class="bg-gradient-to-r from-emerald-600 to-teal-700 rounded-2xl p-4 text-white shadow-md">
+                <span class="bg-white/20 text-xs font-semibold px-2.5 py-1 rounded-full uppercase tracking-wider">After School</span>
+                <h2 class="text-lg font-bold mt-2">1-Hour Daily Study Planner</h2>
+                <p class="text-xs text-emerald-100 mt-0.5">Focused revision slot to master all 11 subjects</p>
+            </div>
+
+            <!-- Study Timer Widget -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 text-center">
+                <div class="text-xs uppercase tracking-wider text-slate-400 font-semibold mb-1">Today's Focus Session</div>
+                <div id="study-timer-display" class="text-4xl font-black text-slate-800 my-2">60:00</div>
+                <p id="study-subject-target" class="text-sm font-medium text-blue-600 mb-4">Target: Mathematics & Science Revision</p>
+                <div class="flex justify-center space-x-3">
+                    <button id="timer-start-btn" onclick="toggleStudyTimer()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl font-semibold text-sm shadow-sm transition flex items-center space-x-2">
+                        <i class="fa-solid fa-play" id="timer-icon"></i>
+                        <span id="timer-btn-text">Start Session</span>
+                    </button>
+                    <button onclick="resetStudyTimer()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2.5 rounded-xl font-semibold text-sm transition">
+                        Reset
+                    </button>
+                </div>
+            </div>
+
+            <!-- Subject Revision Checklist -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="font-bold text-slate-800 text-sm flex items-center">
+                        <i class="fa-solid fa-book-open text-emerald-600 mr-2"></i>
+                        Daily Subject Checklist (11 Subjects)
+                    </h3>
+                </div>
+                <div class="space-y-2.5" id="study-checklist-container">
+                    <!-- Populated via JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: HOMEWORK & TRACKER -->
+        <div id="tab-homework" class="tab-content space-y-4">
+            <div class="bg-gradient-to-r from-purple-600 to-indigo-700 rounded-2xl p-4 text-white shadow-md">
+                <span class="bg-white/20 text-xs font-semibold px-2.5 py-1 rounded-full uppercase tracking-wider">Assignments</span>
+                <h2 class="text-lg font-bold mt-2">Homework & Progress Tracker</h2>
+                <p class="text-xs text-purple-100 mt-0.5">Track your daily tasks and subject mastery</p>
+            </div>
+
+            <!-- Add Homework Form -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4">
+                <h3 class="font-bold text-slate-800 text-sm mb-3 flex items-center">
+                    <i class="fa-solid fa-circle-plus text-purple-600 mr-2"></i> Add New Homework/Task
+                </h3>
+                <form id="homework-form" onsubmit="addHomework(event)" class="space-y-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Select Subject</label>
+                        <select id="hw-subject" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
+                            <!-- Populated via JS -->
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Task Description</label>
+                        <input type="text" id="hw-title" placeholder="e.g., Complete Chapter 3 Practice Set 3.1" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
+                    </div>
+                    <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2.5 rounded-xl text-sm transition shadow-sm">
+                        Add Homework Task
+                    </button>
+                </form>
+            </div>
+
+            <!-- Homework Task List -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4">
+                <h3 class="font-bold text-slate-800 text-sm mb-3 flex items-center">
+                    <i class="fa-solid fa-list-check text-purple-600 mr-2"></i> Active Tasks
+                </h3>
+                <div class="space-y-2.5" id="homework-list-container">
+                    <!-- Populated via JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: SUBJECTS DIRECTORY -->
+        <div id="tab-subjects" class="tab-content space-y-4">
+            <div class="bg-gradient-to-r from-amber-500 to-orange-600 rounded-2xl p-4 text-white shadow-md">
+                <span class="bg-white/20 text-xs font-semibold px-2.5 py-1 rounded-full uppercase tracking-wider">Curriculum</span>
+                <h2 class="text-lg font-bold mt-2">All 11 Maharashtra Board Subjects</h2>
+                <p class="text-xs text-amber-100 mt-0.5">Quick reference guide and progress overview</p>
+            </div>
+
+            <div class="grid grid-cols-1 gap-3" id="subjects-grid-container">
+                <!-- Populated via JavaScript -->
+            </div>
+        </div>
+
+    </main>
+
+    <nav class="bg-white border-t border-slate-200 fixed bottom-0 left-0 right-0 z-40 shadow-lg">
+        <div class="max-w-md mx-auto flex justify-around py-2 px-2">
+            <button onclick="switchTab('timetable')" id="nav-timetable" class="flex flex-col items-center justify-center w-16 py-1 text-blue-600 transition">
+                <i class="fa-solid fa-calendar-days text-lg"></i>
+                <span class="text-[10px] font-semibold mt-1">Timetable</span>
+            </button>
+            <button onclick="switchTab('planner')" id="nav-planner" class="flex flex-col items-center justify-center w-16 py-1 text-slate-400 hover:text-slate-600 transition">
+                <i class="fa-solid fa-clock-rotate-left text-lg"></i>
+                <span class="text-[10px] font-semibold mt-1">Planner</span>
+            </button>
+            <button onclick="switchTab('homework')" id="nav-homework" class="flex flex-col items-center justify-center w-16 py-1 text-slate-400 hover:text-slate-600 transition">
+                <i class="fa-solid fa-list-check text-lg"></i>
+                <span class="text-[10px] font-semibold mt-1">Homework</span>
+            </button>
+            <button onclick="switchTab('subjects')" id="nav-subjects" class="flex flex-col items-center justify-center w-16 py-1 text-slate-400 hover:text-slate-600 transition">
+                <i class="fa-solid fa-book-bookmark text-lg"></i>
+                <span class="text-[10px] font-semibold mt-1">Subjects</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- MODAL: Edit Timetable Day -->
+    <div id="edit-timetable-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-5 shadow-2xl border border-slate-200 space-y-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-slate-800 text-base" id="edit-modal-title">Edit Timetable</h3>
+                <button onclick="closeEditTimetableModal()" class="text-slate-400 hover:text-slate-600 text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <p class="text-xs text-slate-500">Configure periods for <span id="modal-day-name" class="font-semibold text-slate-700"></span></p>
+            <div id="modal-periods-list" class="space-y-3">
+                <!-- Populated via JavaScript -->
+            </div>
+            <div class="flex space-x-2 pt-2">
+                <button onclick="closeEditTimetableModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-2.5 rounded-xl text-sm transition">Cancel</button>
+                <button onclick="saveTimetableEdits()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-xl text-sm transition shadow-sm">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Publish / APK Guide -->
+    <div id="publish-guide-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl border border-slate-200 space-y-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-slate-800 text-base flex items-center">
+                    <i class="fa-solid fa-rocket text-blue-600 mr-2"></i> Publish & APK Guide
+                </h3>
+                <button onclick="closePublishGuide()" class="text-slate-400 hover:text-slate-600 text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="space-y-3 text-xs text-slate-600 leading-relaxed">
+                <div class="bg-blue-50 p-3 rounded-xl border border-blue-100">
+                    <h4 class="font-bold text-blue-900 mb-1">Step 1: Host on GitHub Pages</h4>
+                    <p class="text-blue-800">1. Save this complete code as <code class="bg-white px-1 py-0.5 rounded border border-blue-200 font-mono">index.html</code>.<br>2. Upload to a new GitHub repository.<br>3. Go to repository <b>Settings > Pages</b> and set source to main branch. Your web app link is ready!</p>
+                </div>
+                <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-100">
+                    <h4 class="font-bold text-emerald-900 mb-1">Step 2: Convert to Android APK</h4>
+                    <p class="text-emerald-800">You can easily convert your hosted GitHub Pages link into a native Android APK using free online wrappers or tools:<br>• <b>PWABuilder.com</b> (Official Microsoft PWA tool - paste URL, generate Android package)<br>• <b>AppYet</b> or <b>WebIntoApp</b> (Instant APK generators)</p>
+                </div>
+            </div>
+            <button onclick="closePublishGuide()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-xl text-sm transition shadow-sm">Got It!</button>
+        </div>
+    </div>
+
+    <!-- CUSTOM NOTIFICATION TOAST -->
+    <div id="toast" class="fixed bottom-20 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white text-xs px-4 py-2.5 rounded-xl shadow-xl transition-all duration-300 opacity-0 pointer-events-none z-50 flex items-center space-x-2">
+        <i class="fa-solid fa-circle-check text-emerald-400"></i>
+        <span id="toast-msg">Action successful</span>
+    </div>
+
+    <script>
+        // All 11 Maharashtra State Board Class 9 Subjects with Metadata
+        const SUBJECTS = [
+            { id: 'english', name: 'English', code: 'EN', color: 'bg-blue-500', text: 'text-blue-600', bgLight: 'bg-blue-50', icon: 'fa-language' },
+            { id: 'hindi', name: 'Hindi', code: 'HI', color: 'bg-rose-500', text: 'text-rose-600', bgLight: 'bg-rose-50', icon: 'fa-book' },
+            { id: 'urdu', name: 'Urdu', code: 'UR', color: 'bg-purple-500', text: 'text-purple-600', bgLight: 'bg-purple-50', icon: 'fa-feather' },
+            { id: 'marathi', name: 'Marathi', code: 'MR', color: 'bg-amber-500', text: 'text-amber-600', bgLight: 'bg-amber-50', icon: 'fa-book-open-reader' },
+            { id: 'math1', name: 'Mathematics 1 (Algebra)', code: 'M1', color: 'bg-indigo-500', text: 'text-indigo-600', bgLight: 'bg-indigo-50', icon: 'fa-calculator' },
+            { id: 'math2', name: 'Mathematics 2 (Geometry)', code: 'M2', color: 'bg-violet-500', text: 'text-violet-600', bgLight: 'bg-violet-50', icon: 'fa-shapes' },
+            { id: 'sci1', name: 'Science 1', code: 'S1', color: 'bg-emerald-500', text: 'text-emerald-600', bgLight: 'bg-emerald-50', icon: 'fa-atom' },
+            { id: 'sci2', name: 'Science 2', code: 'S2', color: 'bg-teal-500', text: 'text-teal-600', bgLight: 'bg-teal-50', icon: 'fa-dna' },
+            { id: 'history', name: 'History & Political Science', code: 'HS', color: 'bg-orange-500', text: 'text-orange-600', bgLight: 'bg-orange-50', icon: 'fa-landmark' },
+            { id: 'geography', name: 'Geography', code: 'GE', color: 'bg-cyan-500', text: 'text-cyan-600', bgLight: 'bg-cyan-50', icon: 'fa-earth-americas' },
+            { id: 'civics', name: 'Civics', code: 'CV', color: 'bg-sky-500', text: 'text-sky-600', bgLight: 'bg-sky-50', icon: 'fa-scale-balanced' }
+        ];
+
+        // Default Full Weekly Timetable (Monday to Saturday, 7:00 AM - 12:30 PM)
+        const DEFAULT_TIMETABLE = {
+            Monday: [
+                { time: '07:00 AM - 07:45 AM', subject: 'marathi', type: 'lecture' },
+                { time: '07:45 AM - 08:30 AM', subject: 'math1', type: 'lecture' },
+                { time: '08:30 AM - 09:15 AM', subject: 'sci1', type: 'lecture' },
+                { time: '09:15 AM - 09:45 AM', subject: 'BREAK', type: 'break', title: 'Recess Break' },
+                { time: '09:45 AM - 10:30 AM', subject: 'english', type: 'lecture' },
+                { time: '10:30 AM - 11:15 AM', subject: 'history', type: 'lecture' },
+                { time: '11:15 AM - 12:00 PM', subject: 'hindi', type: 'lecture' },
+                { time: '12:00 PM - 12:30 PM', subject: 'geography', type: 'lecture' }
+            ],
+            Tuesday: [
+                { time: '07:00 AM - 07:45 AM', subject: 'math2', type: 'lecture' },
+                { time: '07:45 AM - 08:30 AM', subject: 'sci2', type: 'lecture' },
+                { time: '08:30 AM - 09:15 AM', subject: 'english', type: 'lecture' },
+                { time: '09:15 AM - 09:45 AM', subject: 'BREAK', type: 'break', title: 'Recess Break' },
+                { time: '09:45 AM - 10:30 AM', subject: 'marathi', type: 'lecture' },
+                { time: '10:30 AM - 11:15 AM', subject: 'civics', type: 'lecture' },
+                { time: '11:15 AM - 12:00 PM', subject: 'urdu', type: 'lecture' },
+                { time: '12:00 PM - 12:30 PM', subject: 'math1', type: 'lecture' }
+            ],
+            Wednesday: [
+                { time: '07:00 AM - 07:45 AM', subject: 'sci1', type: 'lecture' },
+                { time: '07:45 AM - 08:30 AM', subject: 'history', type: 'lecture' },
+                { time: '08:30 AM - 09:15 AM', subject: 'math2', type: 'lecture' },
+                { time: '09:15 AM - 09:45 AM', subject: 'BREAK', type: 'break', title: 'Recess Break' },
+                { time: '09:45 AM - 10:30 AM', subject: 'hindi', type: 'lecture' },
+                { time: '10:30 AM - 11:15 AM', subject: 'english', type: 'lecture' },
+                { time: '11:15 AM - 12:00 PM', subject: 'geography', type: 'lecture' },
+                { time: '12:00 PM - 12:30 PM', subject: 'sci2', type: 'lecture' }
+            ],
+            Thursday: [
+                { time: '07:00 AM - 07:45 AM', subject: 'english', type: 'lecture' },
+                { time: '07:45 AM - 08:30 AM', subject: 'marathi', type: 'lecture' },
+                { time: '08:30 AM - 09:15 AM', subject: 'math1', type: 'lecture' },
+                { time: '09:15 AM - 09:45 AM', subject: 'BREAK', type: 'break', title: 'Recess Break' },
+                { time: '09:45 AM - 10:30 AM', subject: 'sci1', type: 'lecture' },
+                { time: '10:30 AM - 11:15 AM', subject: 'history', type: 'lecture' },
+                { time: '11:15 AM - 12:00 PM', subject: 'civics', type: 'lecture' },
+                { time: '12:00 PM - 12:30 PM', subject: 'urdu', type: 'lecture' }
+            ],
+            Friday: [
+                { time: '07:00 AM - 07:45 AM', subject: 'math2', type: 'lecture' },
+                { time: '07:45 AM - 08:30 AM', subject: 'sci2', type: 'lecture' },
+                { time: '08:30 AM - 09:15 AM', subject: 'geography', type: 'lecture' },
+                { time: '09:15 AM - 09:45 AM', subject: 'BREAK', type: 'break', title: 'Recess Break' },
+                { time: '09:45 AM - 10:30 AM', subject: 'english', type: 'lecture' },
+                { time: '10:30 AM - 11:15 AM', subject: 'hindi', type: 'lecture' },
+                { time: '11:15 AM - 12:00 PM', subject: 'marathi', type: 'lecture' },
+                { time: '12:00 PM - 12:30 PM', subject: 'sci1', type: 'lecture' }
+            ],
+            Saturday: [
+                { time: '07:00 AM - 07:45 AM', subject: 'history', type: 'lecture' },
+                { time: '07:45 AM - 08:30 AM', subject: 'math1', type: 'lecture' },
+                { time: '08:30 AM - 09:15 AM', subject: 'civics', type: 'lecture' },
+                { time: '09:15 AM - 09:45 AM', subject: 'BREAK', type: 'break', title: 'Recess Break' },
+                { time: '09:45 AM - 10:30 AM', subject: 'sci2', type: 'lecture' },
+                { time: '10:30 AM - 11:15 AM', subject: 'geography', type: 'lecture' },
+                { time: '11:15 AM - 12:00 PM', subject: 'urdu', type: 'lecture' },
+                { time: '12:00 PM - 12:30 PM', subject: 'english', type: 'lecture' }
+            ]
+        };
+
+        const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        let currentSelectedDay = 'Monday';
+        let timetableData = JSON.parse(localStorage.getItem('mh_class9_timetable')) || DEFAULT_TIMETABLE;
+        let homeworkList = JSON.parse(localStorage.getItem('mh_class9_homework')) || [
+            { id: 1, subject: 'math1', title: 'Algebra Chapter 1 Practice Set 1.1 & 1.2', completed: false },
+            { id: 2, subject: 'sci1', title: 'Science Experiment write-up: Laws of Motion', completed: true },
+            { id: 3, subject: 'marathi', title: 'Marathi Vachan and Grammar worksheet', completed: false }
+        ];
+        let studyChecklist = JSON.parse(localStorage.getItem('mh_class9_study')) || SUBJECTS.reduce((acc, sub) => { acc[sub.id] = false; return acc; }, {});
+
+        // Timer State
+        let timerInterval = null;
+        let timeLeft = 3600; // 60 minutes
+        let isTimerRunning = false;
+
+        // Initialize App on Load
+        window.onload = function() {
+            initDaySelector();
+            renderTimetable();
+            renderSubjectsDropdown();
+            renderHomeworkList();
+            renderStudyChecklist();
+            renderSubjectsGrid();
+        };
+
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.getElementById('tab-' + tabId).classList.add('active');
+
+            // Update Nav Icons
+            const tabs = ['timetable', 'planner', 'homework', 'subjects'];
+            tabs.forEach(t => {
+                const btn = document.getElementById('nav-' + t);
+                if (t === tabId) {
+                    btn.className = "flex flex-col items-center justify-center w-16 py-1 text-blue-600 transition";
+                } else {
+                    btn.className = "flex flex-col items-center justify-center w-16 py-1 text-slate-400 hover:text-slate-600 transition";
+                }
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Initialize Day Selector Bar
+        function initDaySelector() {
+            const container = document.getElementById('day-selector');
+            container.innerHTML = '';
+            DAYS.forEach(day => {
+                const isSelected = day === currentSelectedDay;
+                const btn = document.createElement('button');
+                btn.onclick = () => selectDay(day);
+                btn.className = `px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all shadow-sm ${
+                    isSelected ? 'bg-blue-600 text-white shadow-blue-200' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+                }`;
+                btn.innerHTML = day;
+                container.appendChild(btn);
+            });
+        }
+
+        function selectDay(day) {
+            currentSelectedDay = day;
+            initDaySelector();
+            renderTimetable();
+        }
+
+        // Render Timetable Slots for Selected Day
+        function renderTimetable() {
+            document.getElementById('current-selected-day-label').innerText = currentSelectedDay;
+            const container = document.getElementById('timetable-slots-container');
+            container.innerHTML = '';
+
+            const slots = timetableData[currentSelectedDay] || [];
+            slots.forEach((slot, index) => {
+                const card = document.createElement('div');
+                if (slot.type === 'break') {
+                    card.className = "flex items-center justify-between p-3 bg-amber-50 border border-amber-200 rounded-xl";
+                    card.innerHTML = `
+                        <div class="flex items-center space-x-3">
+                            <div class="w-9 h-9 rounded-lg bg-amber-500 text-white flex items-center justify-center text-sm shadow-sm">
+                                <i class="fa-solid fa-mug-hot"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-xs text-amber-900">${slot.title}</h4>
+                                <p class="text-[10px] text-amber-700">${slot.time}</p>
+                            </div>
+                        </div>
+                        <span class="text-[10px] bg-amber-200 text-amber-800 font-semibold px-2 py-0.5 rounded">Break</span>
+                    `;
+                } else {
+                    const subObj = SUBJECTS.find(s => s.id === slot.subject) || { name: 'General', color: 'bg-blue-500', icon: 'fa-book', text: 'text-blue-600', bgLight: 'bg-blue-50' };
+                    card.className = "flex items-center justify-between p-3 bg-white border border-slate-100 rounded-xl shadow-sm hover:border-slate-200 transition";
+                    card.innerHTML = `
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-xl ${subObj.color} text-white flex items-center justify-center text-base shadow-sm">
+                                <i class="fa-solid ${subObj.icon}"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-xs text-slate-800">${subObj.name}</h4>
+                                <p class="text-[10px] text-slate-400"><i class="fa-regular fa-clock mr-1"></i>${slot.time}</p>
+                            </div>
+                        </div>
+                        <span class="text-[10px] ${subObj.bgLight} ${subObj.text} font-semibold px-2.5 py-1 rounded-lg">Period ${index + (index > 3 ? 0 : 1)}</span>
+                    `;
+                }
+                container.appendChild(card);
+            });
+        }
+
+        // Edit Timetable Modal Logic
+        function openEditTimetableModal() {
+            document.getElementById('modal-day-name').innerText = currentSelectedDay;
+            const listContainer = document.getElementById('modal-periods-list');
+            listContainer.innerHTML = '';
+
+            const slots = timetableData[currentSelectedDay] || [];
+            slots.forEach((slot, idx) => {
+                const div = document.createElement('div');
+                div.className = "flex items-center space-x-2 bg-slate-50 p-2.5 rounded-xl border border-slate-200";
+                
+                if (slot.type === 'break') {
+                    div.innerHTML = `
+                        <div class="flex-1">
+                            <span class="text-[10px] font-bold text-amber-700 uppercase">Recess Break (${slot.time})</span>
+                        </div>
+                        <span class="text-xs font-semibold text-slate-400">Fixed</span>
+                    `;
+                } else {
+                    let options = SUBJECTS.map(s => `<option value="${s.id}" ${s.id === slot.subject ? 'selected' : ''}>${s.name}</option>`).join('');
+                    div.innerHTML = `
+                        <div class="flex-1">
+                            <span class="text-[10px] text-slate-400 block">${slot.time}</span>
+                            <select id="edit-slot-${idx}" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1 text-xs font-medium text-slate-700 mt-1 focus:outline-none focus:border-blue-500">
+                                ${options}
+                            </select>
+                        </div>
+                    `;
+                }
+                listContainer.appendChild(div);
+            });
+
+            document.getElementById('edit-timetable-modal').classList.remove('hidden');
+        }
+
+        function closeEditTimetableModal() {
+            document.getElementById('edit-timetable-modal').classList.add('hidden');
+        }
+
+        function saveTimetableEdits() {
+            const slots = timetableData[currentSelectedDay];
+            slots.forEach((slot, idx) => {
+                if (slot.type !== 'break') {
+                    const selectEl = document.getElementById(`edit-slot-${idx}`);
+                    if (selectEl) {
+                        slot.subject = selectEl.value;
+                    }
+                }
+            });
+            localStorage.setItem('mh_class9_timetable', JSON.stringify(timetableData));
+            closeEditTimetableModal();
+            renderTimetable();
+            showToast('Timetable updated successfully!');
+        }
+
+        // Study Timer Logic
+        function toggleStudyTimer() {
+            const btnText = document.getElementById('timer-btn-text');
+            const timerIcon = document.getElementById('timer-icon');
+            
+            if (isTimerRunning) {
+                clearInterval(timerInterval);
+                isTimerRunning = false;
+                btnText.innerText = 'Resume Session';
+                timerIcon.className = 'fa-solid fa-play';
+            } else {
+                isTimerRunning = true;
+                btnText.innerText = 'Pause Session';
+                timerIcon.className = 'fa-solid fa-pause';
+                
+                timerInterval = setInterval(() => {
+                    if (timeLeft > 0) {
+                        timeLeft--;
+                        updateTimerDisplay();
+                    } else {
+                        clearInterval(timerInterval);
+                        isTimerRunning = false;
+                        btnText.innerText = 'Start Session';
+                        timerIcon.className = 'fa-solid fa-play';
+                        showToast('Study session completed! Great job!');
+                    }
+                }, 1000);
+            }
+        }
+
+        function resetStudyTimer() {
+            clearInterval(timerInterval);
+            isTimerRunning = false;
+            timeLeft = 3600;
+            updateTimerDisplay();
+            document.getElementById('timer-btn-text').innerText = 'Start Session';
+            document.getElementById('timer-icon').className = 'fa-solid fa-play';
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('study-timer-display').innerText = 
+                `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        // Study Checklist Render
+        function renderStudyChecklist() {
+            const container = document.getElementById('study-checklist-container');
+            container.innerHTML = '';
+
+            SUBJECTS.forEach(sub => {
+                const isChecked = studyChecklist[sub.id] || false;
+                const item = document.createElement('div');
+                item.className = "flex items-center justify-between p-2.5 bg-slate-50 border border-slate-100 rounded-xl hover:bg-slate-100/50 transition cursor-pointer";
+                item.onclick = () => toggleStudySubject(sub.id);
+                item.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 rounded-lg ${sub.color} text-white flex items-center justify-center text-xs shadow-sm">
+                            <i class="fa-solid ${sub.icon}"></i>
+                        </div>
+                        <span class="text-xs font-semibold ${isChecked ? 'line-through text-slate-400' : 'text-slate-700'}">${sub.name}</span>
+                    </div>
+                    <div class="w-6 h-6 rounded-full border-2 ${isChecked ? 'bg-emerald-500 border-emerald-500 text-white flex items-center justify-center text-xs' : 'border-slate-300'}">
+                        ${isChecked ? '<i class="fa-solid fa-check text-[10px]"></i>' : ''}
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function toggleStudySubject(subId) {
+            studyChecklist[subId] = !studyChecklist[subId];
+            localStorage.setItem('mh_class9_study', JSON.stringify(studyChecklist));
+            renderStudyChecklist();
+        }
+
+        // Homework & Tasks Logic
+        function renderSubjectsDropdown() {
+            const select = document.getElementById('hw-subject');
+            select.innerHTML = '';
+            SUBJECTS.forEach(sub => {
+                const opt = document.createElement('option');
+                opt.value = sub.id;
+                opt.innerText = sub.name;
+                select.appendChild(opt);
+            });
+        }
+
+        function addHomework(e) {
+            e.preventDefault();
+            const subjectId = document.getElementById('hw-subject').value;
+            const title = document.getElementById('hw-title').value.trim();
+            if (!title) return;
+
+            const newHw = {
+                id: Date.now(),
+                subject: subjectId,
+                title: title,
+                completed: false
+            };
+
+            homeworkList.unshift(newHw);
+            localStorage.setItem('mh_class9_homework', JSON.stringify(homeworkList));
+            document.getElementById('hw-title').value = '';
+            renderHomeworkList();
+            showToast('Homework task added successfully!');
+        }
+
+        function toggleHomework(id) {
+            const item = homeworkList.find(h => h.id === id);
+            if (item) {
+                item.completed = !item.completed;
+                localStorage.setItem('mh_class9_homework', JSON.stringify(homeworkList));
+                renderHomeworkList();
+            }
+        }
+
+        function deleteHomework(id) {
+            homeworkList = homeworkList.filter(h => h.id !== id);
+            localStorage.setItem('mh_class9_homework', JSON.stringify(homeworkList));
+            renderHomeworkList();
+            showToast('Task removed');
+        }
+
+        function renderHomeworkList() {
+            const container = document.getElementById('homework-list-container');
+            container.innerHTML = '';
+
+            if (homeworkList.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">No active homework tasks. Add one above!</p>`;
+                return;
+            }
+
+            homeworkList.forEach(hw => {
+                const subObj = SUBJECTS.find(s => s.id === hw.subject) || SUBJECTS[0];
+                const card = document.createElement('div');
+                card.className = "flex items-center justify-between p-3 bg-slate-50 border border-slate-100 rounded-xl";
+                card.innerHTML = `
+                    <div class="flex items-center space-x-3 flex-1 min-w-0 pr-2">
+                        <button onclick="toggleHomework(${hw.id})" class="w-6 h-6 rounded-full border-2 ${hw.completed ? 'bg-purple-600 border-purple-600 text-white flex items-center justify-center text-xs' : 'border-slate-300'} flex-shrink-0">
+                            ${hw.completed ? '<i class="fa-solid fa-check text-[10px]"></i>' : ''}
+                        </button>
+                        <div class="min-w-0">
+                            <span class="text-[10px] font-bold ${subObj.text} block uppercase">${subObj.name}</span>
+                            <p class="text-xs font-semibold ${hw.completed ? 'line-through text-slate-400' : 'text-slate-800'} truncate">${hw.title}</p>
+                        </div>
+                    </div>
+                    <button onclick="deleteHomework(${hw.id})" class="text-slate-400 hover:text-rose-500 text-xs p-1">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Subjects Directory Grid
+        function renderSubjectsGrid() {
+            const container = document.getElementById('subjects-grid-container');
+            container.innerHTML = '';
+
+            SUBJECTS.forEach(sub => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex items-center justify-between";
+                card.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-xl ${sub.color} text-white flex items-center justify-center text-base shadow-sm">
+                            <i class="fa-solid ${sub.icon}"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-xs text-slate-800">${sub.name}</h4>
+                            <p class="text-[10px] text-slate-400">Maharashtra State Board Class 9</p>
+                        </div>
+                    </div>
+                    <span class="text-xs font-bold ${sub.bgLight} ${sub.text} px-2.5 py-1 rounded-lg">${sub.code}</span>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Modal Controls
+        function openPublishGuide() {
+            document.getElementById('publish-guide-modal').classList.remove('hidden');
+        }
+
+        function closePublishGuide() {
+            document.getElementById('publish-guide-modal').classList.add('hidden');
+        }
+
+        // Toast Notification
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = msg;
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'pointer-events-none');
+            }, 2500);
+        }
+    </script>
+</body>
+</html>
