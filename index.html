@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Website to APK Converter</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #eef2ff;
+  text-align: center;
+  padding: 25px;
+}
+.container {
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+}
+input, button {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  box-sizing: border-box;
+}
+button {
+  background: #2457e6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <h2>Website to APK Converter</h2>
+  <input id="url" type="url"
+    placeholder="Website URL (https://...)">
+  <input id="appName" type="text"
+    placeholder="App Name">
+  <button onclick="convert()">Create APK</button>
+  <p id="message"></p>
+</div>
+<script>
+function convert() {
+  const url = document.getElementById("url").value;
+  const name = document.getElementById("appName").value;
+
+  if (!url.startsWith("https://") &&
+      !url.startsWith("http://")) {
+    document.getElementById("message").textContent =
+      "Sahi website URL daalo.";
+    return;
+  }
+
+  if (!name.trim()) {
+    document.getElementById("message").textContent =
+      "App ka naam likho.";
+    return;
+  }
+
+  document.getElementById("message").textContent =
+    "Website URL aur app name ready hain. APK banane ke liye Android build tool chahiye.";
+}
+</script>
+</body>
+</html>
